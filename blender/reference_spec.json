@@ -1,0 +1,556 @@
+{
+  "meta": {
+    "description": "Especificación del módulo Tiny House leída de la imagen de referencia (render isométrico en corte) y de los datos del autor. build_model.py toma de aquí sus parámetros.",
+    "reference_image": "C:/Users/paolin/Downloads/image.png",
+    "units": "m",
+    "axes": "Blender: X = largo del casco, Y = ancho (-Y = frente en corte), Z = altura; suelo en z = 0. El GLB convierte a Y arriba: (x, y, z) -> (x, z, -y).",
+    "source_values": {
+      "autor": "dato entregado por el autor del proyecto",
+      "imagen": "estimado midiendo la imagen de referencia (proporciones relativas al casco)",
+      "supuesto": "valor razonable a falta de dato; reemplazar cuando exista"
+    },
+    "conflicts": [
+      "La imagen muestra unos 12 paneles FV; se mantienen 20 paneles de 150 W (3.000 W, dato del autor) con la misma disposición de bastidor.",
+      "La imagen muestra unos 8 pilares; se mantienen 10 pilotes (dato del autor) más los pilares de terraza y escalera."
+    ]
+  },
+  "hull": {
+    "type": {
+      "value": "trolebús reciclado, carrocería tipo bus con cantos redondeados",
+      "source": "autor"
+    },
+    "length": {
+      "value": 10.5,
+      "source": "supuesto"
+    },
+    "width": {
+      "value": 2.5,
+      "source": "supuesto"
+    },
+    "height": {
+      "value": 2.9,
+      "source": "supuesto"
+    },
+    "corner_radius": {
+      "value": 0.35,
+      "source": "imagen"
+    },
+    "paint": {
+      "body": "amarillo envejecido con óxido",
+      "lower_band": {
+        "color": "azul gris",
+        "height_from_floor": 0.8
+      },
+      "stripe": {
+        "color": "gris oscuro",
+        "z_from_floor": [
+          0.8,
+          0.95
+        ]
+      },
+      "roof": "blanco con óxido",
+      "source": "imagen"
+    },
+    "rear_end": {
+      "position": "-X",
+      "emergency_door": {
+        "width": 0.8,
+        "height": 1.95,
+        "y": 0.0,
+        "note": "puerta de emergencia original, fija (no es el acceso)"
+      },
+      "windows": [
+        {
+          "y": -0.8,
+          "w": 0.5,
+          "h": 0.9
+        },
+        {
+          "y": 0.8,
+          "w": 0.5,
+          "h": 0.9
+        }
+      ],
+      "tail_lights": "4 rojos: 2 bajos junto al parachoques, 2 altos bajo la cubierta",
+      "source": "imagen"
+    },
+    "front_end": {
+      "position": "+X (sobre la terraza)",
+      "door_to_terrace": {
+        "width": 0.8,
+        "height": 1.95,
+        "y": 0.45
+      },
+      "window": {
+        "y": -0.6,
+        "w": 0.8,
+        "h": 0.9
+      },
+      "mirrors": "2 espejos laterales de bus en brazos, a 0,4 m bajo la cubierta",
+      "source": "imagen"
+    },
+    "side_windows": {
+      "wall": "+Y (posterior)",
+      "count": 6,
+      "w": 1.1,
+      "h": 0.85,
+      "sill_from_floor": 1.32,
+      "source": "imagen"
+    }
+  },
+  "envelope": {
+    "layers_outside_in": [
+      {
+        "name": "chapa",
+        "object": "hull",
+        "material": "acero del casco reciclado",
+        "thickness": 0.04,
+        "note": "chapa real de 1,5 mm; 40 mm en el modelo para que se lea en el corte",
+        "source": "supuesto"
+      },
+      {
+        "name": "aislación",
+        "object": "insulation",
+        "material": "lana mineral en placas dentro de bastidor de madera",
+        "thickness": 0.15,
+        "source": "imagen"
+      },
+      {
+        "name": "revestimiento",
+        "object": "lining",
+        "material": "placa interior gris 15 mm",
+        "thickness": 0.015,
+        "source": "imagen"
+      }
+    ],
+    "insulation": {
+      "material": "lana mineral amarilla, placas rígidas",
+      "wall": {
+        "thickness": 0.15,
+        "source": "imagen"
+      },
+      "roof": {
+        "thickness": 0.15,
+        "source": "imagen"
+      },
+      "floor": {
+        "thickness": 0.15,
+        "note": "placas entre vigas de piso de madera, sobre el bastidor de cajones",
+        "source": "imagen"
+      },
+      "batt_module": {
+        "width": 0.6,
+        "height": 0.4,
+        "note": "placas separadas por montantes verticales @ 0,6 m y travesaños horizontales @ 0,4 m",
+        "source": "imagen"
+      },
+      "verification": "falta cálculo de transmitancia U según OGUC 4.1.10 (zona térmica de Valparaíso)"
+    },
+    "frame": {
+      "material": "madera estructural cepillada (tono claro), bastidor tipo panel",
+      "stud": {
+        "section": [
+          0.045,
+          0.15
+        ],
+        "spacing": 0.6,
+        "source": "imagen"
+      },
+      "noggin": {
+        "section": [
+          0.045,
+          0.15
+        ],
+        "spacing": 0.4,
+        "note": "soleras y travesaños horizontales que enmarcan cada placa",
+        "source": "imagen"
+      },
+      "rafter": {
+        "spacing": 0.6,
+        "zone": "tramo plano de la cubierta"
+      },
+      "floor_joist": {
+        "spacing": 0.6
+      }
+    },
+    "cutaway": {
+      "wall": "-Y (frente)",
+      "x_range": [
+        -4.3,
+        3.7
+      ],
+      "z_from_floor": [
+        0.55,
+        "cubierta - 0.35"
+      ],
+      "step_beyond_lining": {
+        "hull": 0.35,
+        "insulation": 0.18,
+        "wall_frame": 0.18,
+        "lining": 0.0
+      },
+      "note": "la chapa se retira más que la lana y esta más que el terciado: quedan a la vista las tres capas y los perfiles, como en la imagen",
+      "source": "imagen"
+    }
+  },
+  "structure": {
+    "system": {
+      "value": "pilares de perfil H sobre dado de hormigón; viga I longitudinal; encima un bastidor de cajones de plancha de acero que recibe el piso; sin arriostramiento en cruz",
+      "source": "imagen"
+    },
+    "piles": {
+      "count": {
+        "value": 10,
+        "source": "autor"
+      },
+      "free_height": {
+        "value": 1.5,
+        "source": "autor"
+      },
+      "grid_x": [
+        -4.8,
+        -2.4,
+        0.0,
+        2.4,
+        4.8
+      ],
+      "grid_y": [
+        -1.1,
+        1.1
+      ],
+      "section": {
+        "value": "perfil H 150 x 150",
+        "size": 0.15,
+        "source": "imagen"
+      },
+      "base_plate": {
+        "size": 0.3,
+        "thickness": 0.02
+      }
+    },
+    "foundation": {
+      "type": {
+        "value": "dado de hormigón único, prismático, sobresale del terreno",
+        "source": "imagen"
+      },
+      "block": {
+        "size": [
+          0.7,
+          0.7
+        ],
+        "z": [
+          -0.25,
+          0.35
+        ]
+      }
+    },
+    "chassis": {
+      "main_beams": {
+        "y": [
+          -1.1,
+          1.1
+        ],
+        "profile": "viga I",
+        "depth": 0.3,
+        "flange": 0.15,
+        "continuous": "del extremo trasero del casco al extremo de la terraza",
+        "source": "imagen"
+      },
+      "cell_frame": {
+        "depth": 0.45,
+        "plate": 0.02,
+        "cell_length": 1.2,
+        "longitudinal_plates_y": [
+          0.0,
+          1.2
+        ],
+        "front_plate": "y = -1.2, se exporta como cutaway_chassis_front (abierto en el corte, como en la imagen)",
+        "bottom_plate": true,
+        "extent": "bajo el casco y la terraza",
+        "source": "imagen"
+      }
+    },
+    "bracing": {
+      "value": false,
+      "note": "la imagen no muestra cruces bajo la casa; activar si el cálculo lo exige",
+      "source": "imagen"
+    },
+    "terrace_posts": {
+      "section": 0.12,
+      "note": "mismo tipo de dado"
+    }
+  },
+  "stair": {
+    "location": {
+      "wall": "+Y (costado opuesto al corte)",
+      "near": "extremo trasero (-X)",
+      "source": "imagen",
+      "note": "aprovecha la antigua puerta de pasajeros del bus como acceso"
+    },
+    "door": {
+      "x_center": -4.55,
+      "width": 0.8,
+      "height": 1.95,
+      "type": "puerta plegable de bus de dos hojas vidriadas"
+    },
+    "landing": {
+      "size": [
+        1.0,
+        0.8
+      ],
+      "support": "ménsulas desde el bastidor de cajones + un pilar"
+    },
+    "direction": "baja en -X, paralela al costado, hacia el extremo trasero",
+    "steps": 9,
+    "run": 0.25,
+    "width": 0.8,
+    "stringers": {
+      "type": "perfil rectangular de acero 200 x 50",
+      "anchor_top": "descanso",
+      "anchor_bottom": "losa de hormigón"
+    },
+    "handrail": {
+      "side": "exterior",
+      "height": 0.95
+    }
+  },
+  "terrace": {
+    "location": {
+      "end": "+X",
+      "source": "imagen"
+    },
+    "depth": 1.8,
+    "support": "prolongación de las vigas principales + 2 pilares con fundación escalonada",
+    "deck": "tablas de madera 135 mm",
+    "railing": {
+      "sides": [
+        "front",
+        "end",
+        "back"
+      ],
+      "height": 1.0,
+      "note": "la imagen deja ver baranda en dos lados; se cierran los tres por seguridad (altura de caída 1,8 m)"
+    }
+  },
+  "pv": {
+    "panel": {
+      "size": [
+        1.16,
+        0.65
+      ],
+      "thickness": {
+        "value": 0.035,
+        "note": "dato del autor: 18 cm, por confirmar"
+      },
+      "power_w": 150,
+      "source": "autor"
+    },
+    "array": {
+      "rows": 2,
+      "cols": 10,
+      "total_w": 3000,
+      "orientation": "lado de 1,16 m en el ancho",
+      "source": "autor"
+    },
+    "frame": {
+      "height_over_roof": 0.55,
+      "posts_per_side": 4,
+      "diagonals": true,
+      "source": "imagen"
+    },
+    "skylight": {
+      "size": [
+        0.6,
+        0.6
+      ],
+      "x": -1.5,
+      "note": "tragaluz bajo el bastidor",
+      "source": "imagen"
+    }
+  },
+  "tech_niche": {
+    "location": {
+      "between": [
+        "dormitorio",
+        "baño"
+      ],
+      "x_range": [
+        1.0,
+        1.6
+      ],
+      "source": "imagen"
+    },
+    "back_panel": {
+      "y": 0.25,
+      "note": "panel paralelo al muro frontal; los equipos miran al corte",
+      "source": "imagen"
+    },
+    "inverter": {
+      "size": [
+        0.4,
+        0.15,
+        0.5
+      ],
+      "center_z_from_floor": 1.5,
+      "color": "blanco con pantalla",
+      "source": "imagen"
+    },
+    "electrical_panel": {
+      "size": [
+        0.32,
+        0.1,
+        0.38
+      ],
+      "center_z_from_floor": 2.05,
+      "note": "tablero de distribución sobre el inversor",
+      "source": "supuesto"
+    },
+    "battery": {
+      "size": [
+        0.5,
+        0.3,
+        0.6
+      ],
+      "center_z_from_floor": 0.32,
+      "note": "equipo gris con rejilla bajo el inversor",
+      "source": "imagen"
+    },
+    "datalogger": {
+      "size": [
+        0.18,
+        0.06,
+        0.12
+      ],
+      "center_z_from_floor": 1.05,
+      "note": "registro de las variables del Perfil I+D",
+      "source": "supuesto"
+    },
+    "cable_route": "bastidor FV -> borde de cubierta -> baja por el nicho -> inversor -> batería -> bajo el piso hasta el medidor"
+  },
+  "rooms": [
+    {
+      "name": "cocina-comedor",
+      "x_range": [
+        -5.1,
+        -2.4
+      ],
+      "furniture": [
+        "mueble bajo con lavaplatos y encimera",
+        "muebles altos",
+        "campana",
+        "refrigerador",
+        "mesa con 2 sillas"
+      ]
+    },
+    {
+      "name": "dormitorio",
+      "x_range": [
+        -2.4,
+        1.0
+      ],
+      "furniture": [
+        "cama con cajones, plumón y cojines",
+        "repisas con libros",
+        "escritorio con notebook, lámpara y silla",
+        "alfombra",
+        "planta"
+      ]
+    },
+    {
+      "name": "nicho técnico",
+      "x_range": [
+        1.0,
+        1.6
+      ],
+      "furniture": [
+        "inversor",
+        "tablero",
+        "datalogger",
+        "batería"
+      ]
+    },
+    {
+      "name": "baño",
+      "x_range": [
+        1.6,
+        3.6
+      ],
+      "furniture": [
+        "azulejos",
+        "ducha vidriada con ducha de lluvia",
+        "inodoro",
+        "vanitorio con espejo",
+        "toallero"
+      ]
+    },
+    {
+      "name": "hall terraza",
+      "x_range": [
+        3.6,
+        5.1
+      ],
+      "furniture": [
+        "banca",
+        "colgadores"
+      ]
+    }
+  ],
+  "water": {
+    "greywater": {
+      "color": "celeste",
+      "route": "ducha y lavamanos -> bajo el piso -> colector -> biofiltro -> estanque"
+    },
+    "treated": {
+      "color": "verde",
+      "route": "estanque -> bomba -> sube hasta el inodoro"
+    },
+    "biofilter": {
+      "position": [
+        -1.2,
+        -0.3
+      ],
+      "size": [
+        1.6,
+        1.2,
+        0.7
+      ],
+      "layers_bottom_up": [
+        [
+          "grava",
+          0.25
+        ],
+        [
+          "arena",
+          0.18
+        ],
+        [
+          "tierra vegetal con plantas",
+          0.15
+        ]
+      ],
+      "source": "imagen"
+    },
+    "tank": {
+      "volume_l": 1000,
+      "size": [
+        1.4,
+        1.0,
+        0.75
+      ],
+      "material": "vidrio / acrílico",
+      "pit": {
+        "center": [
+          2.3,
+          -2.9
+        ],
+        "size": [
+          2.6,
+          2.0,
+          1.4
+        ]
+      },
+      "source": "autor"
+    },
+    "pump": "al costado del estanque, dentro del foso"
+  }
+}
